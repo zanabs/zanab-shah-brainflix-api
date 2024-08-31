@@ -1,12 +1,20 @@
-import express from 'express';
-import axios from 'axios';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import express from "express"; 
+import "dotenv/config"; 
 
-const __filename=fileURLToPath(import.meta.url);
-const __dirname=path.dirname(__filename);
+import cors from "cors"; 
+import router from "./routes/videoRoutes.js"; 
 
-const app = express();
-const port = 8080;
-const
+const app = express(); 
+const { PORT, CORS_ORIGIN } = process.env; 
+
+app.use(express.json()); 
+
+app.use(express.static("public")); 
+
+app.use(cors({ origin: CORS_ORIGIN}));
+
+app.use(router); 
+
+app.listen(PORT, ()=> {
+    console.log(`Server is up and running at http://localhost:${PORT}`);
+}); 
