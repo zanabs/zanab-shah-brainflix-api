@@ -50,9 +50,21 @@ router.post("/videos", (req, res) =>{
         id: uuidv4(),
         title: req.body.title,
         description: req.body.description,
-        channel: "your channel",
+        channel: "Zanab",
         image: "http://localhost:8080/images/placeholder.jpg",
-        timestamp: new Date().getTime()
+        views: "980,544",
+        likes: "22,479",
+        duration: "4:01",
+        timestamp: new Date().getTime(),
+        comments:[
+        {
+            "id": uuidv4(),
+            "name": "CharliXCX",
+            "comment": "Your website is so brat xx",
+            "likes": 0,
+            "timestamp": 1691731062000
+        },
+    ]
     };
 
     videoData.push(newVideo);
