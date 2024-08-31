@@ -1,3 +1,4 @@
+
 import express from "express";
 
 const router = express.Router();
@@ -9,13 +10,23 @@ router.get("/", (req, res) => {
 });
 
 router.get("/videos", (req, res) => {
-    const videos = fs.readFileSync("./data/videos.json");
-    res.send(JSON.parse(videos));
+    const videos = JSON.parse(fs.readFileSync("./data/videos.json"));
+    const getVideoData = videos.map(video => {
+        return {
+            id: video.id,
+            title: video.title,
+            channel: video.channel,
+            image: video.image
+        }
+    })
+
+    res.send(getVideoData);
+
 })
 
 router.get("/videos/:id", (req, res)=>{
     const videos = JSON.parse(fs.readFileSync("./data/videos.json")); 
-    const foundVideo = songs.find((video)=> video.id === req.params.id);
+    const foundVideo = videos.find((video)=> video.id === req.params.id);
     res.send(JSON.stringify(foundVideo));
 });
 
@@ -37,8 +48,11 @@ router.post("/videos", (req, res) =>{
 
     const newVideo={
         id: uuidv4(),
-        name:req.body.name,
-        description:req.body.description,
+        title: req.body.title,
+        description: req.body.description,
+        channel: "your channel",
+        image: "http://localhost:8080/images/placeholder.jpg",
+        timestamp: new Date().getTime()
     };
 
     videoData.push(newVideo);
