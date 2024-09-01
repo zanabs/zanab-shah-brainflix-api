@@ -29,7 +29,7 @@ router.get("/videos", (req, res) => {
 router.get("/videos/:id", (req, res)=>{
     const videos = JSON.parse(fs.readFileSync("./data/videos.json")); 
     const foundVideo = videos.find((video)=> video.id === req.params.id);
-    res.send(JSON.stringify(foundVideo));
+    res.send(JSON.stringify(foundVideo, null, 2));
 });
 
 // upload new video
@@ -73,7 +73,7 @@ router.post("/videos", (req, res) =>{
 
     videoData.push(newVideo);
     
-    fs.writeFileSync("./data/videos.json", JSON.stringify(videoData));
+    fs.writeFileSync("./data/videos.json", JSON.stringify(videoData, null, 2));
 
     res.send(newVideo);
 });
@@ -102,7 +102,7 @@ router.post("/videos/:id/comments", (req, res) => {
     }
 
     foundVideo.comments.push(newComment);
-    fs.writeFileSync("./data/videos.json", JSON.stringify(videoData)); 
+    fs.writeFileSync("./data/videos.json", JSON.stringify(videoData, null, 2)); 
     res.send(newComment);
 
 } );
@@ -115,7 +115,7 @@ router.delete("/videos/:videoId/comments/:commentsId", (req, res) => {
     const foundComment = foundVideo.comments.find((comment)=>comment.id === req.params.commentsId); 
     const deletedCommentIndex = foundVideo.comments.indexOf(foundComment);
     foundVideo.comments.splice(deletedCommentIndex, deletedCommentIndex + 1);
-    fs.writeFileSync("./data/videos.json", JSON.stringify(videoData));
+    fs.writeFileSync("./data/videos.json", JSON.stringify(videoData, null, 2));
     res.send(foundComment);
 
 })
