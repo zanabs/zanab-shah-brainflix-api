@@ -24,11 +24,15 @@ router.get("/videos", (req, res) => {
 
 })
 
+// play selected video
+
 router.get("/videos/:id", (req, res)=>{
     const videos = JSON.parse(fs.readFileSync("./data/videos.json")); 
     const foundVideo = videos.find((video)=> video.id === req.params.id);
     res.send(JSON.stringify(foundVideo));
 });
+
+// upload new video
 
 router.post("/videos", (req, res) =>{
     const videoData = JSON.parse(fs.readFileSync("./data/videos.json", "utf8"));
@@ -44,7 +48,7 @@ router.post("/videos", (req, res) =>{
                 "One of the required parameters are missing from your request"
         });
         return;
-    }
+    } 
 
     const newVideo={
         id: uuidv4(),
@@ -73,5 +77,40 @@ router.post("/videos", (req, res) =>{
 
     res.send(newVideo);
 });
+
+// add comment 
+router.post("/videos/:id/comments", (req, res) => {
+    const videoData = JSON.parse(fs.readFileSync("./data/videos.json", "utf8"));
+    const foundVideo = videoData.find((video)=> video.id === req.params.id);
+    if (
+        !req.body.comment
+    ) {
+        res.status(400).json({
+            error:"Sorry, there is a required parameter missing",
+            message: "Sorry, you are missing the required comments field"
+        });
+        return;
+       
+    }
+    const newComment = {
+        
+            name: "Your Name",
+            comment: req.body.comment,
+            id: foundVideo.id,
+            timestamp: new Date().getTime(),
+            
+    }
+
+    foundVideo.comments.push(newComment);
+    fs.writeFileSync("./data/videos.json", JSON.stringify(videoData)); 
+    res.send(newComment);
+
+} );
+
+// delete comment 
+
+
+
+
 
 export default router;
