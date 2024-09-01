@@ -96,7 +96,7 @@ router.post("/videos/:id/comments", (req, res) => {
         
             name: "Your Name",
             comment: req.body.comment,
-            id: foundVideo.id,
+            id: uuidv4(),
             timestamp: new Date().getTime(),
             
     }
@@ -108,6 +108,18 @@ router.post("/videos/:id/comments", (req, res) => {
 } );
 
 // delete comment 
+
+router.delete("/videos/:videoId/comments/:commentsId", (req, res) => {
+    const videoData = JSON.parse(fs.readFileSync("./data/videos.json"));
+    const foundVideo = videoData.find((video)=>video.id === req.params.videoId);
+    const foundComment = foundVideo.comments.find((comment)=>comment.id === req.params.commentsId); 
+    const deletedCommentIndex = foundVideo.comments.indexOf(foundComment);
+    foundVideo.comments.splice(deletedCommentIndex, deletedCommentIndex + 1);
+    fs.writeFileSync("./data/videos.json", JSON.stringify(videoData));
+    res.send(foundComment);
+
+})
+
 
 
 
