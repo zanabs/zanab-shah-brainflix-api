@@ -102,7 +102,6 @@ router.post("/videos/:id/comments", (req, res) => {
     }
 
     foundVideo.comments.push(newComment);
-    foundVideo.comments.sort((a,b)=> new Date(a.date) - new Date(b.date));
     fs.writeFileSync("./data/videos.json", JSON.stringify(videoData, null, 2)); 
     res.send(newComment);
 
@@ -115,7 +114,7 @@ router.delete("/videos/:videoId/comments/:commentsId", (req, res) => {
     const foundVideo = videoData.find((video)=>video.id === req.params.videoId);
     const foundComment = foundVideo.comments.find((comment)=>comment.id === req.params.commentsId); 
     const deletedCommentIndex = foundVideo.comments.indexOf(foundComment);
-    foundVideo.comments.splice(deletedCommentIndex, deletedCommentIndex + 1);
+    foundVideo.comments.splice(deletedCommentIndex, 1);
     fs.writeFileSync("./data/videos.json", JSON.stringify(videoData, null, 2));
     res.send(foundComment);
 
