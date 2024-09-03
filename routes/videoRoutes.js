@@ -102,6 +102,7 @@ router.post("/videos/:id/comments", (req, res) => {
     }
 
     foundVideo.comments.push(newComment);
+    foundVideo.comments.sort((a,b)=> new Date(a.date) - new Date(b.date));
     fs.writeFileSync("./data/videos.json", JSON.stringify(videoData, null, 2)); 
     res.send(newComment);
 
